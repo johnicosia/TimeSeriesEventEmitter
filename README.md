@@ -30,3 +30,6 @@ docker run \
 
 The command to normally run the docker container
 docker start influxdb2
+
+# Run server
+python3 main.py
