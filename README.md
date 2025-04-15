@@ -10,7 +10,11 @@ python3 with the following dependencies:
 docker - using influxdb's offical docker image
 
 # Run influxdb using docker
-This is the command to setup a docker container with influxdb
+This is the command to setup a docker container with influxdb note that if any of the values are different here main.py needs to be updated starting on (line 11) for the following properties:
+bucket = "test"
+org = "test"
+token = "HLA5J8IhE_TAQjAoXX8buquu49a6tpofyXNs26RfWNtTNJXpnfox2zwgBSEeKTP7ggb6G55xJrZaupDVKGBkSg=="
+url="http://localhost:8086"
 
 docker run \
  --name influxdb2 \
