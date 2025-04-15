@@ -8,8 +8,7 @@ import uvicorn
 
 app = FastAPI()
 
-async def generate_tempature_events():
-    interval = 1
+async def generate_tempature_events(interval):
     temperature = 70
     while True:
         data = {}
@@ -26,8 +25,8 @@ async def generate_tempature_events():
         await asyncio.sleep(interval)
 
 @app.get("/stream")
-async def get_timeseries_data():
-    return EventSourceResponse(generate_tempature_events())
+async def get_timeseries_data(interval: int = 1):
+    return EventSourceResponse(generate_tempature_events(interval))
 
 if __name__ == "__main__":
     uvicorn.run(app, host="localhost", port=8000, reload=False)
