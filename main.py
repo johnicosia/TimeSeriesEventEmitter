@@ -50,7 +50,7 @@ async def get_timeseries_data(interval: int = 1):
 @app.get("/history")
 async def get_history(last: int = 10):
     query_api = client.query_api()
-    query = 'from(bucket: \"{bucket}\") |> range(start: -99y) |> sort(columns: ["_time"], desc: true) |> limit(n: {last})'
+    query = f'from(bucket: \"{bucket}\") |> range(start: -99y) |> sort(columns: ["_time"], desc: true) |> limit(n: {last})'
     print(query)
     # Currently the query function is erroring out.
     result = query_api.query(org=org, query=query)
