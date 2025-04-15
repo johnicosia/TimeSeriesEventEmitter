@@ -5,10 +5,26 @@ import asyncio
 import json
 import random
 import uvicorn
+import influxdb_client
+from influxdb_client.client.write_api import SYNCHRONOUS
+
+# TODO externalize influxdb configuration
+bucket = "test"
+org = "test"
+token = "HLA5J8IhE_TAQjAoXX8buquu49a6tpofyXNs26RfWNtTNJXpnfox2zwgBSEeKTP7ggb6G55xJrZaupDVKGBkSg=="
+# Store the URL of your InfluxDB instance
+url="http://localhost:8086"
+
+events = []
 
 app = FastAPI()
 
-events = []
+client = influxdb_client.InfluxDBClient(url=url, token=token, org=org)
+
+def store_data(data):
+    write_api = client.write_api(write_options=SYNCHRONOUS)
+    point = influxdb_client.Point("metrics").tag("metric", data["metric"]).tag("timestamp", data["timestamp"]).field("value", data["value"])
+    write_api.write(bucket=bucket, org=org, record=point)
 
 async def generate_tempature_events(interval):
     temperature = 70
@@ -22,7 +38,7 @@ async def generate_tempature_events(interval):
         tempature_difference = random.random() if tempature_goes_up else (random.random() * -1)
         temperature = round(temperature + tempature_difference, 2)
         data["value"] = temperature
-        events.append(data)
+        store_data(data)
         yield {"data": json.dumps(data)}
         # wait an interval before repeating the loop
         await asyncio.sleep(interval)
