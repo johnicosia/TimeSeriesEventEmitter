@@ -50,7 +50,7 @@ async def get_timeseries_data(interval: int = 1):
 @app.get("/history")
 async def get_history(last: int = 10):
     query_api = client.query_api()
-    query = f'from(bucket: \"{bucket}\") |> range(start: -99y) |> sort(columns: ["_time"], desc: true) |> group() |> top(n: {last})'
+    query = f'from(bucket: \"{bucket}\") |> range(start: -99y) |> group() |> sort(columns: ["_time"], desc: true) |> limit(n: {last})'
     result = query_api.query(org=org, query=query)
     results = []
     for table in result:
